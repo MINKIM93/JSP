@@ -15,7 +15,7 @@
 		Class.forName(driver);
 		conn=DriverManager.getConnection(url,"scott","123456");
 		
-	pstmt=conn.prepareStatement("SELET * FROM clobtable WHERE num=1");
+	pstmt=conn.prepareStatement("SELECT * FROM clobtable WHERE num=1");
 		rs = pstmt.executeQuery();
 		if(rs.next()){
 			Reader rd = rs.getCharacterStream("content");
@@ -24,7 +24,7 @@
 			char[] buf = new char[1024];
 			int readcnt;
 			while((readcnt = rd.read(buf, 0, 1024)) != -1){
-				sb.append(buf, 0, readcnt);//스트링버퍼에 추가시킴
+				sb.append(buf, 0, readcnt);
 			}
 		}
 			rs.close();
