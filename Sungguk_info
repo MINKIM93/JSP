@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*"%>
+<%
+		String hak=request.getParameter("hak");
+		
+		Connection conn=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		try {
+			Context init = new InitialContext();
+			DataSource ds =
+					(DataSource) init.lookup("java:comp/env/jdbc/OracleDB");
+			conn = ds.getConnection();
+			
+			pstmt=conn.prepareStatement("SELECT * FROM sungjuk WHERE hak = ?");
+			pstmt.setString(1,hak);
+			rs=pstmt.executeQuery();
+			rs.next();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Input Sungjuk</title>
+</head>
+<body>
+<form name="info" action = "info.jsp" method="post">
+<table border=1 width=300>
+	<tr align=center><td>학번 : </td><td><%=rs.getString("hak") %></td></tr>
+	<tr align=center><td>이름 : </td><td><%=rs.getString("name") %></td></tr>
+	<tr align=center><td>국어 : </td><td><%=rs.getString("kor") %></td></tr>
+	<tr align=center><td>수학 : </td><td><%=rs.getString("math") %></td></tr>
+	<tr align=center><td>영어 : </td><td><%=rs.getString("eng") %></td></tr>
+	<tr align=center><td>합계 : </td><td><%=rs.getString("tot") %></td></tr>
+	<tr align=center><td>등급 : </td><td><%=rs.getString("grade") %></td></tr>
+	<tr align=center>
+		<td colspan=2><a href="List.jsp">리스트로 돌아가기</a></td>
+	</tr>
+</table>
+</form>
+</body>
+</html>
