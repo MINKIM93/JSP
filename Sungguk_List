@@ -1,0 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*"%>
+<%@ page import="javax.sql.*"%>
+<%@ page import="javax.naming.*"%>
+<%
+  Connection conn = null; //연결 conn = null
+  PreparedStatement pstmt = null; //준비된성명서 pstmt = null
+  ResultSet rs = null; //결과 rs = null
+  
+  try { 
+    Context init = new InitialContext();
+    DataSource ds = (DataSource) init.lookup("java:comp/env/jdbc/OracleDB");
+    conn = ds.getConnection();
+    
+    pstmt = conn.prepareStatement("SELECT * FROM sungjuk");
+    rs = pstmt.executeQuery();
+    
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    %>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sungjuk list</title>
+</head>
+<body>
+  <table border=1 width=300>
+    <tr align=center>
+        <td colspan=3>list <a href="inputform.jsp">입력</a>
+        </td>
+    </tr>
+    <%
+      wjile (rs.next()) {
+    %>
+    <tr align=center>
+        <td><a href="info.jsp?hak=<%=rs.getString("hak)%>"><%=rs.getString("hak")%></a></td>
+        <td><a href="updateform.jsp?hak=<%=rs.getString("hak")%>">수정</a>
+        <td><a href="delete.jsp?hak=<%=rs.getString("hak")%>">삭제</a></td>
+    </tr>
+    <%
+      }
+    %>
+   </table>
+ </body>
+ </html>
